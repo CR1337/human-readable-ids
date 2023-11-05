@@ -86,3 +86,9 @@ pushchair-font-4
 ```
 
 The creation of human readable ids is based in MD5 hashing. In the rare case that to different ids result in a hash collision, the `HumanReadableIdManager` will detect this and make sure that the human readable ids are different. It is therefore guaranteed that the `HumanReadableIdManager` will never return the same human readable id for two different ids.
+
+You can store the `HumanReadableIdManager` object in a file using the `save` method and load it again using the `load` method.
+```python
+manager.save("manager.pkl")
+manager = HumanReadableIdManager.load("manager.pkl")
+```
