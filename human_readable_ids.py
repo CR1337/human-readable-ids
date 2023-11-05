@@ -1,5 +1,7 @@
+from __future__ import annotations
 from hashlib import md5
 from typing import Dict, List
+import pickle
 
 
 class HumanReadableIdManager:
@@ -21,11 +23,20 @@ class HumanReadableIdManager:
     _original_to_human_readable: Dict[ORIGINAL_ID_TYPE, str]
     _human_readbale_to_original: Dict[str, ORIGINAL_ID_TYPE]
 
+    @classmethod
+    def load(cls, filename: str) -> HumanReadableIdManager:
+        with open(filename, 'rb') as file:
+            return pickle.load(file)
+
     def __init__(self, seed: int | None = None):
         self._seed = seed
         self._hash_counter = {}
         self._original_to_human_readable = {}
         self._human_readbale_to_original = {}
+
+    def save(self, filename: str) -> None:
+        with open(filename, 'wb') as file:
+            pickle.dump(self, file)
 
     def _bytes_to_hash(self, value: ORIGINAL_ID_TYPE) -> bytes:
         if not isinstance(value, bytes):

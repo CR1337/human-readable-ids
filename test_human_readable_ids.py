@@ -1,5 +1,6 @@
 import pytest
 from typing import List
+import tempfile
 
 from human_readable_ids import HumanReadableIdManager
 
@@ -199,3 +200,21 @@ def test_correct_len(
     original_ids
 ):
     assert len(filled_manager_seed_0) == len(original_ids)
+
+
+def test_pickle(
+    filled_manager_seed_0,
+):
+    with tempfile.NamedTemporaryFile() as f:
+        filled_manager_seed_0.save(f.name)
+        loaded_manager = HumanReadableIdManager.load(f.name)
+
+    assert len(filled_manager_seed_0) == len(loaded_manager)
+    assert filled_manager_seed_0._seed == loaded_manager._seed
+    assert filled_manager_seed_0._hash_counter == loaded_manager._hash_counter
+    assert filled_manager_seed_0._original_to_human_readable == (
+        loaded_manager._original_to_human_readable
+    )
+    assert filled_manager_seed_0._human_readbale_to_original == (
+        loaded_manager._human_readbale_to_original
+    )
